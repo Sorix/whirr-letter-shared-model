@@ -7,6 +7,18 @@
 
 import Foundation
 
+var sharedModelDecoder: JSONDecoder = {
+	let decoder = JSONDecoder()
+	decoder.keyDecodingStrategy = .convertFromSnakeCase
+	return decoder
+}()
+
+var sharedModelEncoder: JSONEncoder = {
+	let encoder = JSONEncoder()
+	encoder.keyEncodingStrategy = .convertToSnakeCase
+	return encoder
+}()
+
 open class Letter: Codable {
 	
 	public var sourceClient: String
