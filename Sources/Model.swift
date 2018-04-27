@@ -7,6 +7,18 @@
 
 import Foundation
 
+public extension JSONEncoder {
+	public func snakeCased() {
+		keyEncodingStrategy = .convertToSnakeCase
+	}
+}
+
+public extension JSONDecoder {
+	public func snakeCased() {
+		keyDecodingStrategy = .convertFromSnakeCase
+	}
+}
+
 var sharedModelDecoder: JSONDecoder = {
 	let decoder = JSONDecoder()
 	decoder.keyDecodingStrategy = .convertFromSnakeCase
