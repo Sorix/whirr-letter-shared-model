@@ -10,7 +10,7 @@ open class Letter: Codable {
 	public var envelope: Int
 	public var extras: Int
 	//	 var letterBody: String?
-	//	 var yourRef: String?
+	public var yourRef: String? { return id?.uuidString }
 	public var pdf: Data?
 	
 	// MARK: Addresses
@@ -34,6 +34,32 @@ open class Letter: Codable {
 			} catch {
 				assertionFailure("\(error)")
 				self.addressesJSON = String()
+			}
+		}
+	}
+	
+	// MARK: Sender
+	
+	/// We store sender as JSON String because Fluent doesn't support JSON DB Type.
+	/// Github Issue: [fluent-postgresql#48](https://github.com/vapor/fluent-postgresql/issues/48)
+	var senderJSON: String?
+	public var sender: Sender? {
+		get {
+			do {
+				guard let senderJSON = self.senderJSON else { return nil }
+				return try JSONDecoder().decode(Sender.self, from: senderJSON)
+			} catch {
+				assertionFailure("\(error)")
+				return nil
+			}
+		}
+		
+		set {
+			do {
+				self.senderJSON = try JSONEncoder().encode(newValue)
+			} catch {
+				assertionFailure("\(error)")
+				self.senderJSON = nil
 			}
 		}
 	}
