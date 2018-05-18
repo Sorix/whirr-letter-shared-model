@@ -1,109 +1,37 @@
 import Foundation
 
-open class Letter: Codable {
-	
-	public var id: UUID?
-	public var sourceClient: String
-	public var receiverCountryCode: Int
-	public var postage: Int
-	public var paper: Int
-	public var envelope: Int
-	public var extras: Int
-	//	 var letterBody: String?
-	public var yourRef: String? { return id?.uuidString }
-	public var pdf: Data?
-	
-	// MARK: Addresses
-	
-	/// We store addresses as JSON String because Fluent doesn't support JSON DB Type.
-	/// Github Issue: [fluent-postgresql#48](https://github.com/vapor/fluent-postgresql/issues/48)
-	var addressesJSON = String()
-	public var addresses: [Address] {
-		get {
-			do {
-				return try JSONDecoder().decode([Address].self, from: addressesJSON)
-			} catch {
-				assertionFailure("\(error)")
-				return [Address]()
-			}
-		}
-		
-		set {
-			do {
-				self.addressesJSON = try JSONEncoder().encode(newValue)
-			} catch {
-				assertionFailure("\(error)")
-				self.addressesJSON = String()
-			}
-		}
-	}
-	
-	// MARK: Sender
-	
-	/// We store sender as JSON String because Fluent doesn't support JSON DB Type.
-	/// Github Issue: [fluent-postgresql#48](https://github.com/vapor/fluent-postgresql/issues/48)
-	var senderJSON: String?
-	public var sender: Sender? {
-		get {
-			do {
-				guard let senderJSON = self.senderJSON else { return nil }
-				return try JSONDecoder().decode(Sender.self, from: senderJSON)
-			} catch {
-				assertionFailure("\(error)")
-				return nil
-			}
-		}
-		
-		set {
-			do {
-				self.senderJSON = try JSONEncoder().encode(newValue)
-			} catch {
-				assertionFailure("\(error)")
-				self.senderJSON = nil
-			}
-		}
-	}
-	
-	// MARK: - Init
+public protocol LetterModel: Codable {
+	associatedtype AddressModelType: AddressModel
+	associatedtype SenderModelType: SenderModel
 
-	public init(sourceClient: String, addresses: [Address], receiverCountryCode: Int, postage: Int, paper: Int, envelope: Int, extras: Int) {
-		self.sourceClient = sourceClient
-		self.receiverCountryCode = receiverCountryCode
-		self.postage = postage
-		self.paper = paper
-		self.envelope = envelope
-		self.extras = extras
-		self.addresses = addresses
-	}
+	var sourceClient: String { get }
+	var receiverCountryCode: Int { get }
+	var postage: Int { get }
+	var paper: Int { get }
+	var envelope: Int { get }
+	var extras: Int { get }
+	var pdf: Data? { get }
+//	var yourRef: String? { get }
 	
+	var addresses: [AddressModelType] { get }
+	var sender: SenderModelType? { get }
 }
 
-// MARK: - Submodels
+public protocol AddressModel: Codable {
+	var name: String? { get }
+	var addressLine1: String? { get }
+	var addressLine2: String? { get }
+	var townCity: String? { get }
+	var postCode: String? { get }
+}
 
-extension Letter {
-	
-	public struct Address: Codable {
-		var name: String?
-		var addressLine1: String?
-		var addressLine2: String?
-		var townCity: String?
-		var postCode: String?
-	}
-	
-	public struct Sender: Codable {
-		public var address: String
-		public var includeSenderAddressOnEnvelope: Bool = true
-		
-		public init(address: String) {
-			self.address = address
-		}
-	}
-	
+public protocol SenderModel: Codable {
+	var address: String { get }
+	var includeSenderAddressOnEnvelope: Bool { get }
 }
 
 public enum Letters {
-
-	public typealias Post = Letter
+	public typealias Post = LetterModel
 	public typealias PostAnswer = CreationDetails
 
 	public struct CreationDetails: Codable {
@@ -113,9 +41,5 @@ public enum Letters {
 		public init(id: UUID) {
 			self.id = id
 		}
-
 	}
-
 }
-
-
