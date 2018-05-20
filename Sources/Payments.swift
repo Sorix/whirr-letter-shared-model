@@ -12,4 +12,20 @@ public enum Payments {
 			}
 		}
 	}
+    
+    public struct ChargeRequest: Codable {
+        public let source: String
+        
+        public init(source: String) {
+            self.source = source
+        }
+    }
+    
+    public struct ChargeResponse: Codable {
+        public let chargeID: UUID
+        
+        public init(chargeID: UUID) {
+            self.chargeID = chargeID
+        }
+    }
 }
