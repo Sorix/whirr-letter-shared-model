@@ -5,10 +5,11 @@ public enum Payments {
 		/// Response to `POST /user/persistent_token`
 		public struct Response: Codable {
 			public let letterCost: Double
-			public let currency = "GBP"
+            public let currency: String
 			
-			public init(letterCost: Double) {
+            public init(letterCost: Double, currency: String) {
 				self.letterCost = letterCost
+                self.currency = currency
 			}
 		}
 	}
