@@ -1,8 +1,9 @@
 import Foundation
 
+/// Route /user
 public enum User {
+	/// POST /user/persistent_token
 	public enum CreatePersistentToken {
-		/// Response to `POST /user/persistent_token`
 		public struct Response: Codable {
 			public let userID: UUID
 			public let persistentToken: String
@@ -14,8 +15,8 @@ public enum User {
 		}
 	}
 	
+	/// GET /user/token
 	public enum CreateDiscardableToken {
-		/// Response to `GET /user/token`
 		public struct Response: Codable {
 			public let discardableToken: String
 			

@@ -1,6 +1,8 @@
 import Foundation
 
+/// Route: /payments
 public enum Payments {
+	/// GET /payments/letter/{letter_id}/cost
 	public enum GetCostForLetter {
 		/// Response to `POST /user/persistent_token`
 		public struct Response: Codable {
@@ -13,15 +15,8 @@ public enum Payments {
 			}
 		}
 	}
-    
-    public struct ChargeRequest: Codable {
-        public let source: String
-        
-        public init(source: String) {
-            self.source = source
-        }
-    }
-    
+	
+	/// Successfull response for `POST /payments/letter/{letter_id}/charge`
     public struct ChargeResponse: Codable {
         public let chargeID: UUID
         

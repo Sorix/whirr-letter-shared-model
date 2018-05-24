@@ -1,6 +1,9 @@
 import Foundation
 
+/// Route: /letters
 public enum Letters {
+	
+	/// POST /letters
     public enum Create {
         
         // MARK: Create Letter Request
