@@ -8,14 +8,13 @@ public enum Letters {
         
         // MARK: Create Letter Request
         
-        public struct Request: Codable {
+		public struct Request: Codable {
             public var receiverCountryCode: Int
             public var postage: Int
             public var paper: Int
             public var envelope: Int
             public var extras: Int
             public var pdf: Data?
-            public var numberOfPDFPages: Int
             public var addresses: [Address]
             public var sender: Sender?
 
@@ -25,6 +24,8 @@ public enum Letters {
                 public var addressLine2: String?
                 public var townCity: String?
                 public var postCode: String?
+				
+				public init() {}
             }
             
             public struct Sender: Codable {
@@ -48,14 +49,13 @@ public enum Letters {
 // MARK: Initializers
 
 public extension Letters.Create.Request {
-    public init(addresses: [Letters.Create.Request.Address], receiverCountryCode: Int, postage: Int, paper: Int, envelope: Int, extras: Int, numberOfPages: Int) {
+    public init(addresses: [Letters.Create.Request.Address], receiverCountryCode: Int, postage: Int, paper: Int, envelope: Int, extras: Int) {
         self.receiverCountryCode = receiverCountryCode
         self.postage = postage
         self.paper = paper
         self.envelope = envelope
         self.extras = extras
         self.addresses = addresses
-        self.numberOfPDFPages = numberOfPages
     }
 }
 
