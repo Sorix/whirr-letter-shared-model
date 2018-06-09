@@ -23,13 +23,4 @@ public enum Payments {
 			}
 		}
 	}
-	
-	/// Successfull response for `POST /payments/letter/{letter_id}/charge`
-    public struct ChargeResponse: Codable {
-        public let chargeID: UUID
-        
-        public init(chargeID: UUID) {
-            self.chargeID = chargeID
-        }
-    }
 }
